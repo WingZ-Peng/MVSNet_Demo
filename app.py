@@ -3,32 +3,40 @@ import os
 
 app = Flask(__name__)
 
+DATA_FOLDER = 'data'
+
 @app.route('/')
 def index():
     return render_template('index.html')
 
 @app.route('/upload', methods=['POST'])
 def upload():
-    # Get the uploaded file
-    file = request.files['image']
-    filename = file.filename
+    if 'image' not in request.files:
+        return render_template('index.html', error_message='No image file selected')
+    
+    image_file = request.files['image']
+    if image_file.filename == '':
+        return render_template('index.html', error_message='No image file selected')
 
-    # Generate the result filename
-    result_filename = filename.replace('.jpg', '-result.jpg')
-    result_filepath = os.path.join('data', result_filename)
+    # Remove file extension from image filename
+    image_name = os.path.splitext(image_file.filename)[0]
+    
+    # Find corresponding image and video filenames
+    image_result_filename = f"{image_name}-result.jpg"
+    video_result_filename = f"{image_name}-result.mp4"
+    
+    # Check if the image and video files exist in the data folder
+    image_exists = os.path.isfile(os.path.join(DATA_FOLDER, image_result_filename))
+    video_exists = os.path.isfile(os.path.join(DATA_FOLDER, video_result_filename))
+    
+    if not image_exists or not video_exists:
+        return render_template('index.html', error_message='No matching image or video found')
+    
+    return render_template('result.html', image_filename=image_result_filename, video_filename=video_result_filename)
 
-    if os.path.exists(result_filepath):
-        # Return the result image filename to be displayed in the web page
-        return render_template('result.html', filename=result_filename)
-
-    # If the result file doesn't exist, display an error message
-    error_message = f"Fly is flying!"
-    return render_template('index.html', error_message=error_message)
-
-@app.route('/data/<path:filename>')
+@app.route('/data/<filename>')
 def download_file(filename):
-    # Serve the image file
-    return send_from_directory('data', filename)
+    return send_from_directory(DATA_FOLDER, filename)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
