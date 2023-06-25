@@ -27,12 +27,18 @@
             margin-top: 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
         }
+        .back-button {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Result</h1>
         <img src="{{ url_for('download_file', filename=filename) }}">
+        <div class="back-button">
+            <a href="/">Back</a>
+        </div>
     </div>
 </body>
 </html>
