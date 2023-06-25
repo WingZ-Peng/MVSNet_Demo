@@ -22,7 +22,7 @@ def upload():
         return render_template('result.html', filename=result_filename)
 
     # If the result file doesn't exist, display an error message
-    error_message = f"No related image found for {filename}."
+    error_message = f"Fly is flying!"
     return render_template('index.html', error_message=error_message)
 
 @app.route('/data/<path:filename>')

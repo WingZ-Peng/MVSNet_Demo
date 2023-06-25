@@ -17,16 +17,68 @@
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            animation: fade-in 1s ease-out;
+        }
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
         h1 {
             margin-top: 0;
+            animation: slide-up 1s ease-out;
         }
-        .error-message {
-            color: red;
-            font-weight: bold;
+        @keyframes slide-up {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        .upload-form {
+            margin-top: 30px;
+            animation: slide-up 1s ease-out;
+        }
+        .upload-input {
+            display: none;
+        }
+        .upload-label {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        .upload-label:hover {
+            background-color: #45a049;
+            animation: none;
+        }
+        .upload-file-name {
+            margin-top: 10px;
+            font-style: italic;
         }
         .upload-button {
             margin-top: 20px;
+            animation: slide-up 1s ease-out;
         }
     </style>
 </head>
@@ -36,12 +88,23 @@
         {% if error_message %}
         <p class="error-message">{{ error_message }}</p>
         {% endif %}
-        <form action="/upload" method="post" enctype="multipart/form-data">
-            <input type="file" name="image">
+        <form action="/upload" method="post" enctype="multipart/form-data" class="upload-form">
+            <label for="upload-input" class="upload-label">Choose File</label>
+            <input type="file" name="image" id="upload-input" class="upload-input">
+            <span class="upload-file-name"></span>
             <div class="upload-button">
                 <input type="submit" value="Upload">
             </div>
         </form>
     </div>
+    <script>
+        const uploadInput = document.getElementById('upload-input');
+        const uploadFileName = document.querySelector('.upload-file-name');
+
+        uploadInput.addEventListener('change', () => {
+            const fileName = uploadInput.files[0].name;
+            uploadFileName.textContent = fileName;
+        });
+    </script>
 </body>
 </html>
