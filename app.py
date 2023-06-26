@@ -3,7 +3,8 @@ import os
 
 app = Flask(__name__)
 
-DATA_FOLDER = 'data'
+UPLOAD_FOLDER = 'data'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/')
 def index():
@@ -14,29 +15,33 @@ def upload():
     if 'image' not in request.files:
         return render_template('index.html', error_message='No image file selected')
     
-    image_file = request.files['image']
-    if image_file.filename == '':
+    image = request.files['image']
+    image_name = image.filename
+    if image_name == '':
         return render_template('index.html', error_message='No image file selected')
 
-    # Remove file extension from image filename
-    image_name = os.path.splitext(image_file.filename)[0]
+    # Save the uploaded image
+    image.save(os.path.join(app.config['UPLOAD_FOLDER'], image_name))
     
-    # Find corresponding image and video filenames
-    image_result_filename = f"{image_name}-result.jpg"
-    video_result_filename = f"{image_name}-result.mp4"
+    # Process the image name to find related images
+    image_result_name = image_name.replace('.jpg', '-result.jpg')
+    video_result_name = image_name.replace('.jpg', '-result.mp4')
     
-    # Check if the image and video files exist in the data folder
-    image_exists = os.path.isfile(os.path.join(DATA_FOLDER, image_result_filename))
-    video_exists = os.path.isfile(os.path.join(DATA_FOLDER, video_result_filename))
+    # Check if the related images exist
+    image_result_path = os.path.join(app.config['UPLOAD_FOLDER'], image_result_name)
+    video_result_path = os.path.join(app.config['UPLOAD_FOLDER'], video_result_name)
     
-    if not image_exists or not video_exists:
-        return render_template('index.html', error_message='No matching image or video found')
+    if not os.path.exists(image_result_path) or not os.path.exists(video_result_path):
+        return render_template('index.html', error_message='Fly is flying Weng Weng')
     
-    return render_template('result.html', image_filename=image_result_filename, video_filename=video_result_filename)
+    return render_template('result.html', 
+                           image_filename=image_name,
+                           image_result_filename=image_result_name,
+                           video_filename=video_result_name)
 
-@app.route('/data/<filename>')
+@app.route('/data/<path:filename>')
 def download_file(filename):
-    return send_from_directory(DATA_FOLDER, filename)
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 if __name__ == '__main__':
     app.run()

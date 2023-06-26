@@ -11,6 +11,10 @@
             background-color: #f5f5f5;
             font-family: Arial, sans-serif;
         }
+        h1 {
+            margin-top: 0;
+            animation: slide-up 1s ease-out;
+        }
         .container {
             text-align: center;
             padding: 20px;
@@ -18,28 +22,6 @@
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
             animation: fade-in 1s ease-out;
-        }
-        @keyframes fade-in {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-        h1 {
-            margin-top: 0;
-            animation: slide-up 1s ease-out;
-        }
-        @keyframes slide-up {
-            from {
-                transform: translateY(100px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
         }
         .upload-form {
             margin-top: 30px;
@@ -57,17 +39,6 @@
             cursor: pointer;
             animation: pulse 2s infinite;
         }
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
         .upload-label:hover {
             background-color: #45a049;
             animation: none;
@@ -79,6 +50,39 @@
         .upload-button {
             margin-top: 20px;
             animation: slide-up 1s ease-out;
+        }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        @keyframes slide-up {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
     </style>
 </head>
