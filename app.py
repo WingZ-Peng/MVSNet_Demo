@@ -10,7 +10,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def index():
     return render_template('index.html')
 
-@app.route('/upload', methods=['POST'])
+@app.route('/result', methods=['POST'])
 def upload():
     if 'image' not in request.files:
         return render_template('index.html', error_message='No image file selected')
@@ -24,8 +24,8 @@ def upload():
     image.save(os.path.join(app.config['UPLOAD_FOLDER'], image_name))
     
     # Process the image name to find related images
-    image_result_name = image_name.replace('.jpg', '-result.jpg')
-    video_result_name = image_name.replace('.jpg', '-result.mp4')
+    image_result_name = image_name.replace('.png', '-reconstruction.png')
+    video_result_name = image_name.replace('.png', '-reconstruction.mp4')
     
     # Check if the related images exist
     image_result_path = os.path.join(app.config['UPLOAD_FOLDER'], image_result_name)
